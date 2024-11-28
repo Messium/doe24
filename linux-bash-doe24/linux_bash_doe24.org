@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       f404fe8d-3709-464f-bd9c-770cbd60ce47
+:END:
+#+title: linux-bash-doe24
+#+created: 28-11-2024
+
+Here I will save all the exercies for the course linux-bash-doe24.

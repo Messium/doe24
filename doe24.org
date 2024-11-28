@@ -1,0 +1,7 @@
+:PROPERTIES:
+:ID:       5e2cac55-aeb2-4ffd-b28b-224425094526
+:END:
+#+title: doe24
+#+created: 28-11-2024
+
+[[id:f404fe8d-3709-464f-bd9c-770cbd60ce47][linux-bash-doe24]]
