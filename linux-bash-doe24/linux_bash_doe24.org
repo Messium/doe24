@@ -4,4 +4,115 @@
 #+title: linux-bash-doe24
 #+created: 28-11-2024
 
+* Bash-Beginners-Guide :bash:
 Here I will save all the exercies for the course linux-bash-doe24.
+Based on the book: https://tldp.org/LDP/Bash-Beginners-Guide/Bash-Beginners-Guide.pdf
+
+** Chapter 8
+
+* Vagrant :vagrant:
+Some Vagrant boxes with a minimal provisioning:
+- https://github.com/Messium/ubuntu_vagrant
+- https://github.com/Messium/fedora_vagrant
+
+
+* TODO restic backup :restic:backup:
+TODO: tangle with ssh https://www.youtube.com/watch?v=88hNCgU9VmA
+
+** repo backup med restic
+
+*** Restic
+
+Here I setup a new restic repo and create systemd configuration from a Fedora (host) to Ubuntu (server backup side):
+
+**** Restic create a new repo -- init
+
+***** Preperations
+
+Setup pass password store for storing the password that we will use for restic.
+
+****** Init pass
+
+#+begin_src bash
+pass init test@test.com
+#+end_src
+
+****** setup gpg
+
+#+begin_src bash
+gpg --full-generate-key
+#+end_src
+
+****** Setup a new entry with pass that save the password for restic
+
+#+begin_src bash
+pass insert backup/restic
+#+end_src
+
+***** init
+
+Set same password as for gnu pass.
+
+#+begin_src bash
+restic -r sftp://messium@192.168.124.197/restic/restic_repo init
+#+end_src
+
+**** Create systemd timer:
+
+Test this path instead: /usr/lib/systemd/user or /usr/lib/systemd/system/
+
+Alternativ paths:
+ ~/.config/systemd/user/restic.timer
+ ~/usr/lib/systemd/user/restic.timer
+ ~/usr/lib/systemd/system/restic.timer
+
+#+begin_src bash tangle: /usr/lib/systemd/system/restic.timer
+[Unit]
+Description=Run restic backup on startup after 5 minutes.
+
+[Timer]
+OnBootSec=5min
+
+[Install]
+WantedBy=timers.target
+#+end_src
+
+**** Service systemd setup
+
+#+begin_src bash tangle: /usr/lib/systemd/system/restic.service
+[Unit]
+Description=restic backup service
+
+[Service]
+ExecStart=restic -r sftp://messium@192.168.124.197/restic/restic_repo backup $HOME/Documents -p $(pass backup/restic)
+
+[Install]
+WantedBy=default.target
+#+end_src
+
+
+**** Start service systemd and systemd timer
+
+#+begin_src bash
+systemctl --user enable restic.service
+systemctl --user enable restic.timer
+systemctl --user start restic.service
+systemctl --user start restic.timer
+#+end_src
+
+**** Confirm activation
+
+Pass --all to see loaded but inactive timers, too
+
+Confirm that the systemd timer is activated:
+
+#+begin_src bash
+systemctl list-timers --all
+#+end_src
+
+
+Confirm that the systemd service is activated:
+
+#+begin_src bash
+systemctl list-units --all
+#+end_src

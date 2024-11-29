@@ -1,0 +1,87 @@
+% Created 2024-11-29 dv. 14:36
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{messium}
+\date{\today}
+\title{linux-bash-doe24}
+\hypersetup{
+ pdfauthor={messium},
+ pdftitle={linux-bash-doe24},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 29.4 (Org mode 9.7.11)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Bash-Beginners-Guide\hfill{}\textsc{bash}}
+\label{sec:org4052777}
+Here I will save all the exercies for the course linux-bash-doe24.
+Based on the book: \url{https://tldp.org/LDP/Bash-Beginners-Guide/Bash-Beginners-Guide.pdf}
+\subsection{Chapter 8}
+\label{sec:org119d5d2}
+\section{Vagrant\hfill{}\textsc{vagrant}}
+\label{sec:orge8c0a4a}
+Some Vagrant boxes with a minimal provisioning:
+\begin{itemize}
+\item \url{https://github.com/Messium/ubuntu\_vagrant}
+\item \url{https://github.com/Messium/fedora\_vagrant}
+\end{itemize}
+\section{restic backup\hfill{}\textsc{restic:backup}}
+\label{sec:org57b522d}
+
+\subsection{repo backup med restic}
+\label{sec:orga19bcff}
+
+\subsubsection{Restic}
+\label{sec:org8c36b4d}
+Here I setup a new restic repo and create systemd configuration from a Fedora (host) to Ubuntu (server backup side):
+\begin{enumerate}
+\item Restic create a new repo -- init
+\label{sec:org1d086e1}
+
+
+\begin{verbatim}
+restic -r sftp://messium@192.168.124.197/restic/restic_repo init
+\end{verbatim}
+\item Create timer:
+\label{sec:org5616f04}
+
+\begin{verbatim}
+[Unit]
+Description=Run restic backup on startup after 2 minutes.
+
+[Timer]
+OnBootSec=2min
+
+[Install]
+WantedBy=timers.target
+\end{verbatim}
+\item Service system setup
+\label{sec:orgf6a94e9}
+
+\begin{verbatim}
+[Unit]
+Description=restic backup service
+
+[Service]
+ExecStart=restic -r sftp://messium@192.168.124.197/restic/restic_repo backup $HOME/Documents
+
+[Install]
+WantedBy=default.target
+\end{verbatim}
+\end{enumerate}
+\end{document}
