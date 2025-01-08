@@ -1,5 +1,7 @@
 [Unit]
 Description=restic backup service
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 ExecStart=restic -r sftp://messium@192.168.124.197/restic/restic_repo backup $HOME/Documents -p $(pass backup/restic)

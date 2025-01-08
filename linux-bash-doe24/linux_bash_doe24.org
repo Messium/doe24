@@ -71,10 +71,11 @@ Alternativ paths:
 
 #+begin_src bash :tangle restic.timer
 [Unit]
-Description=Run restic backup on startup after 15 minutes.
+Description=Run restic backup on startup after 5 minutes.
 
 [Timer]
-OnBootSec=15min
+OnBootSec=5min
+Persistent=true
 
 [Install]
 WantedBy=timers.target
@@ -88,6 +89,8 @@ WantedBy=timers.target
 #+begin_src bash :tangle restic.service
 [Unit]
 Description=restic backup service
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 ExecStart=restic -r sftp://messium@192.168.124.197/restic/restic_repo backup $HOME/Documents -p $(pass backup/restic)
