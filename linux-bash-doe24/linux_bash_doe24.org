@@ -10,6 +10,9 @@ Based on the book: https://tldp.org/LDP/Bash-Beginners-Guide/Bash-Beginners-Guid
 
 ** Chapter 8
 
+
+
+
 * Vagrant :vagrant:
 Some Vagrant boxes with a minimal provisioning:
 - https://github.com/Messium/ubuntu_vagrant
@@ -66,20 +69,23 @@ Alternativ paths:
  ~/usr/lib/systemd/user/restic.timer
  ~/usr/lib/systemd/system/restic.timer
 
-#+begin_src bash tangle: /usr/lib/systemd/system/restic.timer
+#+begin_src bash :tangle restic.timer
 [Unit]
-Description=Run restic backup on startup after 5 minutes.
+Description=Run restic backup on startup after 15 minutes.
 
 [Timer]
-OnBootSec=5min
+OnBootSec=15min
 
 [Install]
 WantedBy=timers.target
 #+end_src
 
+#+RESULTS:
+
 **** Service systemd setup
 
-#+begin_src bash tangle: /usr/lib/systemd/system/restic.service
+
+#+begin_src bash :tangle restic.service
 [Unit]
 Description=restic backup service
 

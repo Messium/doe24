@@ -1,0 +1,8 @@
+[Unit]
+Description=Run restic backup on startup after 15 minutes.
+
+[Timer]
+OnBootSec=15min
+
+[Install]
+WantedBy=timers.target
